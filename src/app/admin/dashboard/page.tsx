@@ -53,8 +53,16 @@ export default async function DashboardPage() {
         </div>
 
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <a
+            href="/admin/banks"
+            className="bg-white border border-slate-200 rounded-xl p-5 hover:border-brand transition"
+          >
+            <div className="font-semibold text-brand">Savol banklari</div>
+            <div className="text-sm mt-1 text-slate-500">
+              Excel'dan savol yuklash va banklarni boshqarish
+            </div>
+          </a>
           {[
-            ["Savollarni import qilish", "Modul 2 — tez orada"],
             ["Imtihon yaratish", "Modul 3 — tez orada"],
             ["Natijalar", "Modul 5–8 — tez orada"],
             ["Telegram sozlamalari", "Modul 7 — tez orada"],
