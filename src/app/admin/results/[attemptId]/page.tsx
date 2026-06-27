@@ -2,6 +2,7 @@ import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { computeLevel } from "@/lib/scoring";
 
 export const dynamic = "force-dynamic";
 
@@ -77,9 +78,10 @@ export default async function ResultDetailPage({ params }: { params: { attemptId
         </div>
 
         {/* Ball */}
-        <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="mt-4 grid grid-cols-2 sm:grid-cols-5 gap-3">
           <Stat k="Ball (100)" v={String(a.score)} big />
           <Stat k="Foiz" v={`${a.percentage}%`} big />
+          <Stat k="Daraja" v={computeLevel(a.percentage).code} big />
           <Stat k="To'g'ri" v={`${a.correct} / ${a.total}`} />
           <Stat k="Xato" v={String(a.wrong)} />
         </div>

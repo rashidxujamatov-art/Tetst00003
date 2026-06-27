@@ -2,6 +2,7 @@ import { PDFDocument, PDFFont, PDFPage, rgb, RGB } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 import { DEJAVU_REGULAR_B64, DEJAVU_BOLD_B64 } from "./fonts";
 import { BRAND } from "./brand";
+import { computeLevel } from "./scoring";
 
 const BLUE = rgb(0.122, 0.306, 0.475); // #1F4E79
 const INK = rgb(0.043, 0.122, 0.2);
@@ -210,6 +211,7 @@ export async function buildOfficialReport(data: ReportData): Promise<Uint8Array>
     ["Xato javoblar", String(data.wrong)],
     ["Foiz", `${data.percentage}%`],
     ["Yakuniy ball (100)", String(data.score)],
+    ["Daraja", computeLevel(data.percentage).name],
     ["Sarflangan vaqt", `${Math.floor(data.timeUsedSec / 60)} daqiqa ${data.timeUsedSec % 60} soniya`],
   ];
   infoRows(d, res);

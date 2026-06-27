@@ -45,8 +45,20 @@ export default async function ResultsPage() {
       </header>
 
       <div className="max-w-6xl mx-auto px-5 py-8">
-        <h1 className="text-2xl font-bold">Natijalar</h1>
-        <p className="text-slate-500 mt-1">Jami topshirilgan: {rows.length} ta urinish.</p>
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <h1 className="text-2xl font-bold">Natijalar</h1>
+            <p className="text-slate-500 mt-1">Jami topshirilgan: {rows.length} ta urinish.</p>
+          </div>
+          {rows.length > 0 && (
+            <a
+              href="/api/results/export"
+              className="rounded-xl bg-green-700 px-5 py-2.5 font-semibold text-white hover:bg-green-800 transition"
+            >
+              Excel'ga eksport
+            </a>
+          )}
+        </div>
         <ResultsClient rows={rows} />
       </div>
     </main>

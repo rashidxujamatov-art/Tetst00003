@@ -1,5 +1,6 @@
 import type { ReportData } from "@/lib/pdf";
 import { BRAND } from "@/lib/brand";
+import { computeLevel } from "@/lib/scoring";
 
 const token = () => process.env.TELEGRAM_BOT_TOKEN || "";
 const chatId = () => process.env.TELEGRAM_CHAT_ID || "";
@@ -60,6 +61,7 @@ export function formatResultMessage(d: ReportData): string {
     `━━━━━━━━`,
     `✅ To'g'ri: <b>${d.correct} / ${d.total}</b>`,
     `🏅 Ball: <b>${d.score} / 100</b> (${d.percentage}%)`,
+    `🎖 Daraja: <b>${computeLevel(d.percentage).name}</b>`,
   ]
     .filter(Boolean)
     .join("\n");

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { computeLevel } from "@/lib/scoring";
 
 type Opt = { letter: string; text: string };
 type Q = { id: string; n: number; text: string; options: Opt[] };
@@ -319,7 +320,7 @@ export default function ExamRunner({
             <Stat k="Ball (100)" v={String(result.score)} big />
             <Stat k="Foiz" v={`${result.percentage}%`} big />
             <Stat k="To'g'ri" v={`${result.correct} / ${result.total}`} />
-            <Stat k="Xato" v={String(result.wrong)} />
+            <Stat k="Daraja" v={computeLevel(result.percentage).name} />
           </div>
         )}
 
