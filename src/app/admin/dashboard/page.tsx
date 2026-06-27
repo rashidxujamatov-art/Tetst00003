@@ -71,10 +71,16 @@ export default async function DashboardPage() {
               Bankdan tasodifiy savolli, vaqtli imtihon
             </div>
           </a>
-          {[
-            ["Natijalar", "Modul 5–8 — tez orada"],
-            ["Telegram sozlamalari", "Modul 7 — tez orada"],
-          ].map(([t, s]) => (
+          <a
+            href="/admin/results"
+            className="bg-white border border-slate-200 rounded-xl p-5 hover:border-brand transition"
+          >
+            <div className="font-semibold text-brand">Natijalar</div>
+            <div className="text-sm mt-1 text-slate-500">
+              Topshirilgan imtihonlar, ball va qidiruv
+            </div>
+          </a>
+          {[["Telegram sozlamalari", "Modul 7 — tez orada"]].map(([t, s]) => (
             <div
               key={t}
               className="bg-white border border-dashed border-slate-300 rounded-xl p-5 text-slate-400"

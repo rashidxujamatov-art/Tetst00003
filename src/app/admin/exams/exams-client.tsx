@@ -24,7 +24,7 @@ export default function ExamsClient({ banks, exams }: { banks: Bank[]; exams: Ex
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState("");
 
-  useEffect(() => setOrigin(window.location.origin), []);
+  useEffect(() => setOrigin(process.env.NEXT_PUBLIC_BASE_URL || window.location.origin), []);
 
   const selectedBank = banks.find((b) => b.id === bankId);
 
