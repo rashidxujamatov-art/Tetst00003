@@ -17,22 +17,25 @@ export default function ExamRunner({
   examName,
   numQuestions,
   durationMin,
+  direction,
   ready,
 }: {
   examId: string;
   examName: string;
   numQuestions: number;
   durationMin: number;
+  direction: string;
   ready: boolean;
 }) {
   const [phase, setPhase] = useState<"form" | "exam" | "done">("form");
 
   // forma
   const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [gender, setGender] = useState("");
+  const [birthDate, setBirthDate] = useState("");
   const [organization, setOrganization] = useState("");
-  const [department, setDepartment] = useState("");
-  const [candidateRef, setCandidateRef] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -53,13 +56,19 @@ export default function ExamRunner({
   async function start(e: React.FormEvent) {
     e.preventDefault();
     setErr("");
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    const phoneDigits = phone.replace(/[^\d]/g, "");
     if (!fullName.trim()) return setErr("F.I.Sh kiriting.");
-    if (!phone.trim()) return setErr("Telefon raqamini kiriting.");
+    if (!emailOk) return setErr("To'g'ri elektron pochta kiriting.");
+    if (phoneDigits.length < 7 || phoneDigits.length > 15)
+      return setErr("Telefon raqamini to'g'ri kiriting (masalan +998 90 123 45 67).");
+    if (!gender) return setErr("Jinsni tanlang.");
+    if (!birthDate) return setErr("Tug'ilgan sanani kiriting.");
     setBusy(true);
     const res = await fetch(`/api/exams/${examId}/start`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fullName, phone, organization, department, candidateRef }),
+      body: JSON.stringify({ fullName, email, phone, gender, birthDate, organization }),
     });
     setBusy(false);
     if (!res.ok) {
@@ -164,30 +173,42 @@ export default function ExamRunner({
             className="w-full rounded-lg border border-slate-200 px-3 py-2.5 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand"
             placeholder="Familiya Ism Sharif" />
 
+          <label className="block text-sm font-semibold mb-1 mt-4">Elektron pochta *</label>
+          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" inputMode="email"
+            className="w-full rounded-lg border border-slate-200 px-3 py-2.5 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand"
+            placeholder="ism@example.com" />
+
           <label className="block text-sm font-semibold mb-1 mt-4">Telefon raqami *</label>
-          <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel"
+          <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" inputMode="tel"
             className="w-full rounded-lg border border-slate-200 px-3 py-2.5 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand"
             placeholder="+998 90 123 45 67" />
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-semibold mb-1 mt-4">Jins *</label>
+              <select value={gender} onChange={(e) => setGender(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 px-3 py-2.5 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand">
+                <option value="">Tanlang…</option>
+                <option>Erkak</option>
+                <option>Ayol</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold mb-1 mt-4">Tug'ilgan sana *</label>
+              <input value={birthDate} onChange={(e) => setBirthDate(e.target.value)} type="date"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2.5 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand" />
+            </div>
+          </div>
 
           <label className="block text-sm font-semibold mb-1 mt-4">Tashkilot / texnikum</label>
           <input value={organization} onChange={(e) => setOrganization(e.target.value)}
             className="w-full rounded-lg border border-slate-200 px-3 py-2.5 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand"
-            placeholder="masalan: Xalqaro standartlarga mos ta'lim" />
+            placeholder="masalan: Samarqand shahar 4-son texnikumi" />
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm font-semibold mb-1 mt-4">Yo'nalish</label>
-              <input value={department} onChange={(e) => setDepartment(e.target.value)}
-                className="w-full rounded-lg border border-slate-200 px-3 py-2.5 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand"
-                placeholder="masalan: CNC" />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold mb-1 mt-4">ID (ixtiyoriy)</label>
-              <input value={candidateRef} onChange={(e) => setCandidateRef(e.target.value)}
-                className="w-full rounded-lg border border-slate-200 px-3 py-2.5 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand"
-                placeholder="—" />
-            </div>
-          </div>
+          <label className="block text-sm font-semibold mb-1 mt-4">Yo'nalish</label>
+          <input value={direction} readOnly
+            className="w-full rounded-lg border border-slate-200 px-3 py-2.5 bg-slate-100 text-slate-600 cursor-not-allowed" />
+          <p className="text-xs text-slate-400 mt-1">Yo'nalish imtihonга qarab avtomatik belgilanadi.</p>
 
           {err && <p className="text-sm text-red-600 mt-3">{err}</p>}
           <button disabled={busy || !ready}

@@ -61,7 +61,10 @@ model Exam {
 model Candidate {
   id           String    @id @default(cuid())
   fullName     String
+  email        String?
   phone        String
+  gender       String?
+  birthDate    String?
   organization String?
   department   String?
   candidateRef String?

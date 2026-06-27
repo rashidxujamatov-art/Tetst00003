@@ -30,10 +30,12 @@ export default async function ResultDetailPage({ params }: { params: { attemptId
   const c = a.candidate;
   const info: [string, string][] = [
     ["F.I.Sh", c.fullName],
+    ["Elektron pochta", c.email || "—"],
     ["Telefon", c.phone],
+    ["Jins", c.gender || "—"],
+    ["Tug'ilgan sana", c.birthDate || "—"],
     ["Tashkilot", c.organization || "—"],
     ["Yo'nalish", c.department || "—"],
-    ["ID", c.candidateRef || "—"],
     ["Imtihon", a.exam.name],
     ["Sana", a.finishedAt ? new Date(a.finishedAt).toLocaleString() : "—"],
     ["Sarflangan vaqt", `${Math.floor(a.timeUsedSec / 60)} daq ${a.timeUsedSec % 60} son`],

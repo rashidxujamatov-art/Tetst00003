@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export default async function ExamPage({ params }: { params: { examId: string } }) {
   const exam = await prisma.exam.findUnique({
     where: { id: params.examId },
-    include: { bank: { select: { _count: { select: { questions: true } } } } },
+    include: { bank: { select: { skill: true, name: true, _count: { select: { questions: true } } } } },
   });
 
   if (!exam) {
@@ -21,6 +21,7 @@ export default async function ExamPage({ params }: { params: { examId: string } 
   }
 
   const enough = exam.bank._count.questions >= exam.numQuestions;
+  const direction = exam.bank.skill || exam.bank.name;
 
   return (
     <ExamRunner
@@ -28,6 +29,7 @@ export default async function ExamPage({ params }: { params: { examId: string } 
       examName={exam.name}
       numQuestions={exam.numQuestions}
       durationMin={exam.durationMin}
+      direction={direction}
       ready={enough}
     />
   );

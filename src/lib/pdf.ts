@@ -14,10 +14,12 @@ export type ReportData = {
   examName: string;
   candidate: {
     fullName: string;
+    email: string | null;
     phone: string;
+    gender: string | null;
+    birthDate: string | null;
     organization: string | null;
     department: string | null;
-    candidateRef: string | null;
   };
   total: number;
   correct: number;
@@ -139,10 +141,12 @@ function candidateInfo(d: Doc, data: ReportData): [string, string][] {
   const c = data.candidate;
   return [
     ["F.I.Sh", c.fullName],
+    ["Elektron pochta", c.email || "—"],
     ["Telefon", c.phone],
+    ["Jins", c.gender || "—"],
+    ["Tug'ilgan sana", c.birthDate || "—"],
     ["Tashkilot", c.organization || "—"],
     ["Yo'nalish", c.department || "—"],
-    ["ID", c.candidateRef || "—"],
     ["Imtihon", data.examName],
     ["Sana", data.finishedAt ? new Date(data.finishedAt).toLocaleString() : "—"],
   ];

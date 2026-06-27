@@ -19,6 +19,7 @@ export default async function ResultsPage() {
   const rows = attemptsRaw.map((a: (typeof attemptsRaw)[number]) => ({
     id: a.id,
     name: a.candidate.fullName,
+    email: a.candidate.email || "",
     phone: a.candidate.phone,
     org: a.candidate.organization || "",
     examName: a.exam.name,

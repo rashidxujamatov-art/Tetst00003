@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 type Row = {
   id: string;
   name: string;
+  email: string;
   phone: string;
   org: string;
   examName: string;
@@ -24,6 +25,7 @@ export default function ResultsClient({ rows }: { rows: Row[] }) {
     return rows.filter(
       (r) =>
         r.name.toLowerCase().includes(s) ||
+        r.email.toLowerCase().includes(s) ||
         r.phone.toLowerCase().includes(s) ||
         r.org.toLowerCase().includes(s) ||
         r.examName.toLowerCase().includes(s)
@@ -35,7 +37,7 @@ export default function ResultsClient({ rows }: { rows: Row[] }) {
       <input
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Qidiruv: F.I.Sh, telefon, tashkilot yoki imtihon…"
+        placeholder="Qidiruv: F.I.Sh, pochta, telefon, tashkilot yoki imtihon…"
         className="w-full sm:max-w-md rounded-lg border border-slate-200 px-3 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-brand"
       />
 

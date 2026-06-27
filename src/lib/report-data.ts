@@ -18,10 +18,12 @@ export async function loadReportData(attemptId: string): Promise<ReportData | nu
     examName: a.exam.name,
     candidate: {
       fullName: a.candidate.fullName,
+      email: a.candidate.email,
       phone: a.candidate.phone,
+      gender: a.candidate.gender,
+      birthDate: a.candidate.birthDate,
       organization: a.candidate.organization,
       department: a.candidate.department,
-      candidateRef: a.candidate.candidateRef,
     },
     total: a.total,
     correct: a.correct,

@@ -52,6 +52,7 @@ export function formatResultMessage(d: ReportData): string {
     `━━━━━━━━`,
     `📝 ${esc(d.examName)}`,
     `👤 <b>${esc(d.candidate.fullName)}</b>`,
+    d.candidate.email ? `✉️ ${esc(d.candidate.email)}` : "",
     `📞 ${esc(d.candidate.phone)}`,
     d.candidate.organization ? `🏢 ${esc(d.candidate.organization)}` : "",
     d.candidate.department ? `🎯 ${esc(d.candidate.department)}` : "",

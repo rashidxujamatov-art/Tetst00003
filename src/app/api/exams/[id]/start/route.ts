@@ -36,19 +36,45 @@ function buildOptions(q: DbQuestion) {
 export async function POST(req: Request, { params }: { params: { id: string } }) {
   const body = await req.json().catch(() => ({}));
   const fullName = String(body.fullName || "").trim();
+  const email = String(body.email || "").trim().toLowerCase();
   const phone = String(body.phone || "").trim();
+  const gender = String(body.gender || "").trim();
+  const birthDate = String(body.birthDate || "").trim();
   const organization = String(body.organization || "").trim() || null;
-  const department = String(body.department || "").trim() || null;
-  const candidateRef = String(body.candidateRef || "").trim() || null;
+
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const phoneDigits = phone.replace(/[^\d]/g, "");
+  const phoneOk = phoneDigits.length >= 7 && phoneDigits.length <= 15;
 
   if (!fullName) return NextResponse.json({ error: "F.I.Sh kiriting" }, { status: 400 });
-  if (!phone) return NextResponse.json({ error: "Telefon raqamini kiriting" }, { status: 400 });
+  if (!emailOk) return NextResponse.json({ error: "To'g'ri elektron pochta kiriting" }, { status: 400 });
+  if (!phoneOk) return NextResponse.json({ error: "Telefon raqami formati noto'g'ri" }, { status: 400 });
+  if (!gender) return NextResponse.json({ error: "Jinsni tanlang" }, { status: 400 });
+  if (!birthDate) return NextResponse.json({ error: "Tug'ilgan sanani kiriting" }, { status: 400 });
 
   const exam = await prisma.exam.findUnique({
     where: { id: params.id },
     include: { bank: { include: { questions: true } } },
   });
   if (!exam) return NextResponse.json({ error: "Imtihon topilmadi" }, { status: 404 });
+
+  // Yo'nalish — imtihon bankidan avtomatik
+  const department = exam.bank.skill || exam.bank.name;
+
+  // Bir martalik: shu imtihonni shu email yoki telefon bilan allaqachon topshirganmi?
+  const prior = await prisma.attempt.findFirst({
+    where: {
+      examId: exam.id,
+      finishedAt: { not: null },
+      candidate: { OR: [{ email }, { phone }] },
+    },
+  });
+  if (prior) {
+    return NextResponse.json(
+      { error: "Siz bu imtihonni allaqachon topshirgansiz. Qayta topshirish mumkin emas." },
+      { status: 409 }
+    );
+  }
 
   const pool = exam.bank.questions as DbQuestion[];
   if (pool.length < exam.numQuestions) {
@@ -62,7 +88,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   });
 
   const candidate = await prisma.candidate.create({
-    data: { fullName, phone, organization, department, candidateRef },
+    data: { fullName, email, phone, gender, birthDate, organization, department },
   });
   const attempt = await prisma.attempt.create({
     data: {
