@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { computeScore } from "@/lib/scoring";
+import { telegramConfigured, tgSendMessage, tgSendDocument, formatResultMessage } from "@/lib/telegram";
+import { buildAnswerSheet, buildOfficialReport } from "@/lib/pdf";
+import { loadReportData, safeName } from "@/lib/report-data";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -40,6 +43,22 @@ export async function POST(req: Request, { params }: { params: { id: string } })
       payload: { ...(attempt.payload as object), answers },
     },
   });
+
+  // Natijani Telegram kanaliga avtomatik yuborish (xatolik nomzod natijasiga ta'sir qilmaydi)
+  if (telegramConfigured()) {
+    try {
+      const data = await loadReportData(attempt.id);
+      if (data) {
+        await tgSendMessage(formatResultMessage(data));
+        const [p1, p2] = await Promise.all([buildAnswerSheet(data), buildOfficialReport(data)]);
+        const nm = safeName(data.candidate.fullName);
+        await tgSendDocument(p2, `hisobot_${nm}.pdf`, "Rasmiy hisobot");
+        await tgSendDocument(p1, `javoblar_${nm}.pdf`, "Javoblar varaqasi");
+      }
+    } catch {
+      // jim o'tkazib yuboriladi
+    }
+  }
 
   return NextResponse.json({ ok: true, total, correct, wrong, score, percentage });
 }
