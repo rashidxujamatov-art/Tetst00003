@@ -29,3 +29,22 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
     },
   });
 }
+
+export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
+  if (!(await getSession())) return NextResponse.json({ error: "Ruxsat yo'q" }, { status: 401 });
+
+  const attempt = await prisma.attempt.findUnique({
+    where: { id: params.id },
+    select: { candidateId: true },
+  });
+  if (!attempt) return NextResponse.json({ ok: true });
+
+  await prisma.attempt.delete({ where: { id: params.id } });
+
+  // Ishtirokchining boshqa urinishi qolmagan bo'lsa, uni ham o'chiramiz
+  const remaining = await prisma.attempt.count({ where: { candidateId: attempt.candidateId } });
+  if (remaining === 0) {
+    await prisma.candidate.delete({ where: { id: attempt.candidateId } }).catch(() => {});
+  }
+  return NextResponse.json({ ok: true });
+}
