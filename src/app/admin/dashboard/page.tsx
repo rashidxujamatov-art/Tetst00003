@@ -62,8 +62,16 @@ export default async function DashboardPage() {
               Excel'dan savol yuklash va banklarni boshqarish
             </div>
           </a>
+          <a
+            href="/admin/exams"
+            className="bg-white border border-slate-200 rounded-xl p-5 hover:border-brand transition"
+          >
+            <div className="font-semibold text-brand">Imtihon yaratish</div>
+            <div className="text-sm mt-1 text-slate-500">
+              Bankdan tasodifiy savolli, vaqtli imtihon
+            </div>
+          </a>
           {[
-            ["Imtihon yaratish", "Modul 3 — tez orada"],
             ["Natijalar", "Modul 5–8 — tez orada"],
             ["Telegram sozlamalari", "Modul 7 — tez orada"],
           ].map(([t, s]) => (
