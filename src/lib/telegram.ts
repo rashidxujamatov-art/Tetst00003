@@ -1,4 +1,5 @@
 import type { ReportData } from "@/lib/pdf";
+import { BRAND } from "@/lib/brand";
 
 const token = () => process.env.TELEGRAM_BOT_TOKEN || "";
 const chatId = () => process.env.TELEGRAM_CHAT_ID || "";
@@ -45,10 +46,14 @@ export function formatResultMessage(d: ReportData): string {
   const tm = `${Math.floor(d.timeUsedSec / 60)} daq ${d.timeUsedSec % 60} son`;
   const date = d.finishedAt ? new Date(d.finishedAt).toLocaleString() : "";
   return [
-    `🎓 <b>${esc(d.examName)}</b>`,
+    `🎓 <b>${esc(BRAND.title)}</b>`,
+    `🏛 ${esc(BRAND.agencyNote)}`,
+    `🏫 ${esc(BRAND.org)}`,
+    `━━━━━━━━`,
+    `📝 ${esc(d.examName)}`,
     `👤 <b>${esc(d.candidate.fullName)}</b>`,
     `📞 ${esc(d.candidate.phone)}`,
-    d.candidate.organization ? `🏫 ${esc(d.candidate.organization)}` : "",
+    d.candidate.organization ? `🏢 ${esc(d.candidate.organization)}` : "",
     d.candidate.department ? `🎯 ${esc(d.candidate.department)}` : "",
     `🕒 ${esc(date)} · ${tm}`,
     `━━━━━━━━`,

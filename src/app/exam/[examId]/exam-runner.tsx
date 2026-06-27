@@ -145,7 +145,7 @@ export default function ExamRunner({
         >
           <div className="mb-4 flex items-center gap-2">
             <div className="h-7 w-7 rounded-lg bg-brand" />
-            <span className="font-bold text-brand">WorldSkills · Imtihon</span>
+            <span className="font-bold text-brand">Xalqaro standartlarga mos ta'lim</span>
           </div>
           <h1 className="text-xl font-bold">{examName}</h1>
           <p className="text-sm text-slate-500 mt-1">
@@ -172,7 +172,7 @@ export default function ExamRunner({
           <label className="block text-sm font-semibold mb-1 mt-4">Tashkilot / texnikum</label>
           <input value={organization} onChange={(e) => setOrganization(e.target.value)}
             className="w-full rounded-lg border border-slate-200 px-3 py-2.5 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand"
-            placeholder="masalan: Samarqand 4-son texnikumi" />
+            placeholder="masalan: Xalqaro standartlarga mos ta'lim" />
 
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -303,7 +303,10 @@ export default function ExamRunner({
         )}
 
         <p className="text-xs text-slate-400 mt-6">
-          Natija tashkilotchiga yuborildi. PDF hisobot keyingi modulда qo'shiladi.
+          Natija tashkilotchiga yuborildi.
+        </p>
+        <p className="text-[11px] text-slate-400 mt-3 border-t border-slate-100 pt-3">
+          Oliy ta'lim vazirligi qoshidagi Kasbiy ta'lim agentligi ko'magida
         </p>
       </div>
     </main>

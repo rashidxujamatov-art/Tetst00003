@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import LogoutButton from "./logout-button";
+import { BRAND } from "@/lib/brand";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +28,7 @@ export default async function DashboardPage() {
         <div className="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-lg bg-brand" />
-            <span className="font-bold text-brand">WorldSkills · Admin</span>
+            <span className="font-bold text-brand">Xalqaro standartlarga mos ta'lim</span>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-sm text-slate-500">{String(session.email || "")}</span>
@@ -38,10 +39,8 @@ export default async function DashboardPage() {
 
       <div className="max-w-5xl mx-auto px-5 py-8">
         <h1 className="text-2xl font-bold">Boshqaruv paneli</h1>
-        <p className="text-slate-500 mt-1">
-          Kirish muvaffaqiyatli. 1-modul tayyor — keyingi modullarda savol import, imtihon
-          yaratish va natijalar qo'shiladi.
-        </p>
+        <p className="text-slate-500 mt-1">{BRAND.org}</p>
+        <p className="text-xs text-slate-400 mt-0.5">{BRAND.agencyNote}</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
           {stats.map((s) => (

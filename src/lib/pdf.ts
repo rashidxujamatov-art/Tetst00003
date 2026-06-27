@@ -1,6 +1,7 @@
 import { PDFDocument, PDFFont, PDFPage, rgb, RGB } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 import { DEJAVU_REGULAR_B64, DEJAVU_BOLD_B64 } from "./fonts";
+import { BRAND } from "./brand";
 
 const BLUE = rgb(0.122, 0.306, 0.475); // #1F4E79
 const INK = rgb(0.043, 0.122, 0.2);
@@ -49,6 +50,14 @@ class Doc {
   newPage() {
     this.page = this.doc.addPage([A4.w, A4.h]);
     this.page.drawRectangle({ x: 0, y: A4.h - 6, width: A4.w, height: 6, color: BLUE });
+    // Pastki kolontitul — har sahifada homiy (agentlik)
+    this.page.drawLine({
+      start: { x: M, y: 34 },
+      end: { x: A4.w - M, y: 34 },
+      thickness: 0.5,
+      color: LINE,
+    });
+    this.page.drawText(`${BRAND.title} · ${BRAND.org}`, { x: M, y: 22, size: 8, font: this.reg, color: GREY });
     this.y = A4.h - M;
   }
   ensure(h: number) {
@@ -102,10 +111,13 @@ class Doc {
 }
 
 function header(d: Doc, title: string, sub: string) {
-  d.text("WORLDSKILLS · TEST PLATFORM", { size: 9, bold: true, color: GREY });
-  d.space(2);
-  d.text(title, { size: 17, bold: true, color: BLUE });
-  d.text(sub, { size: 10, color: GREY });
+  d.text(BRAND.titleUpper, { size: 11, bold: true, color: BLUE });
+  d.space(1);
+  d.text(BRAND.agencyNote, { size: 8.5, color: GREY });
+  d.text(BRAND.org, { size: 8.5, color: GREY });
+  d.space(7);
+  d.text(title, { size: 16, bold: true, color: INK });
+  d.text(sub, { size: 9.5, color: GREY });
   d.space(4);
   d.hr();
 }

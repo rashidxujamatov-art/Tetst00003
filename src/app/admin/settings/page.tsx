@@ -20,7 +20,7 @@ export default async function SettingsPage() {
         <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-lg bg-brand" />
-            <span className="font-bold text-brand">WorldSkills · Admin</span>
+            <span className="font-bold text-brand">Xalqaro standartlarga mos ta'lim</span>
           </div>
           <Link href="/admin/dashboard" className="text-sm text-slate-500 hover:text-brand">
             ← Boshqaruv paneli

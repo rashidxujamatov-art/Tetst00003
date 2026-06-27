@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { BRAND } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "WorldSkills Test Platform",
-  description: "Professional imtihon platformasi",
+  title: BRAND.title,
+  description: `${BRAND.org} — ${BRAND.title}`,
 };
 
 export default function RootLayout({

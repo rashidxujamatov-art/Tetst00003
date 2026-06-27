@@ -14,7 +14,7 @@ export async function POST() {
     );
   }
   const r = await tgSendMessage(
-    "✅ <b>Sinov xabari</b>\nWorldSkills Test Platform — Telegram ulanishi ishlayapti."
+    "✅ <b>Sinov xabari</b>\nXalqaro standartlarga mos ta'lim — Xalqaro standartlarga mos ta'lim platformasi.\nTelegram ulanishi ishlayapti."
   );
   if (r.ok) return NextResponse.json({ ok: true });
   return NextResponse.json(
