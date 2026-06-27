@@ -56,6 +56,24 @@ export default async function ResultDetailPage({ params }: { params: { attemptId
       <div className="max-w-3xl mx-auto px-5 py-8">
         <h1 className="text-2xl font-bold">{c.fullName}</h1>
 
+        {/* PDF tugmalari */}
+        <div className="mt-3 flex flex-wrap gap-2">
+          <a
+            href={`/api/attempts/${a.id}/report1`}
+            target="_blank"
+            className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-600"
+          >
+            PDF 1 — Javoblar varaqasi
+          </a>
+          <a
+            href={`/api/attempts/${a.id}/report2`}
+            target="_blank"
+            className="rounded-lg border border-brand px-4 py-2 text-sm font-semibold text-brand hover:bg-brand-50"
+          >
+            PDF 2 — Rasmiy hisobot
+          </a>
+        </div>
+
         {/* Ball */}
         <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
           <Stat k="Ball (100)" v={String(a.score)} big />
