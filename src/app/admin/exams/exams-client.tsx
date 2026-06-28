@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { BRAND } from "@/lib/brand";
 
 type Bank = { id: string; name: string; count: number };
 type Exam = {
@@ -15,7 +16,9 @@ type Exam = {
 
 export default function ExamsClient({ banks, exams }: { banks: Bank[]; exams: Exam[] }) {
   const router = useRouter();
-  const [origin, setOrigin] = useState("");
+  // Nomzod havolasi HAR DOIM production domen bilan beriladi (admin preview domenда
+  // tursa ham). Domen brand.ts → siteUrl da. Faqat zaxira sifatida joriy domen.
+  const [origin, setOrigin] = useState(BRAND.siteUrl);
   const [name, setName] = useState("");
   const [bankId, setBankId] = useState("");
   const [num, setNum] = useState("");
@@ -24,7 +27,9 @@ export default function ExamsClient({ banks, exams }: { banks: Bank[]; exams: Ex
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState("");
 
-  useEffect(() => setOrigin(process.env.NEXT_PUBLIC_BASE_URL || window.location.origin), []);
+  useEffect(() => {
+    setOrigin(BRAND.siteUrl || process.env.NEXT_PUBLIC_BASE_URL || window.location.origin);
+  }, []);
 
   const selectedBank = banks.find((b) => b.id === bankId);
 
