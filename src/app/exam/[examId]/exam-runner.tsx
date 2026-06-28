@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { computeLevel } from "@/lib/scoring";
+import { isValidEmail, isValidUzPhone } from "@/lib/validate";
+import { BRAND } from "@/lib/brand";
 
 type Opt = { letter: string; text: string };
 type Q = { id: string; n: number; text: string; options: Opt[] };
@@ -57,12 +59,10 @@ export default function ExamRunner({
   async function start(e: React.FormEvent) {
     e.preventDefault();
     setErr("");
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-    const phoneDigits = phone.replace(/[^\d]/g, "");
     if (!fullName.trim()) return setErr("F.I.Sh kiriting.");
-    if (!emailOk) return setErr("To'g'ri elektron pochta kiriting.");
-    if (phoneDigits.length < 7 || phoneDigits.length > 15)
-      return setErr("Telefon raqamini to'g'ri kiriting (masalan +998 90 123 45 67).");
+    if (!isValidEmail(email)) return setErr("To'g'ri elektron pochta kiriting (masalan: ism@example.com).");
+    if (!isValidUzPhone(phone))
+      return setErr("Telefon raqami O'zbekiston formatида bo'lsin: +998 va 9 ta raqam (masalan +998 90 123 45 67).");
     if (!gender) return setErr("Jinsni tanlang.");
     if (!birthDate) return setErr("Tug'ilgan sanani kiriting.");
     setBusy(true);
@@ -328,7 +328,7 @@ export default function ExamRunner({
           Natija tashkilotchiga yuborildi.
         </p>
         <p className="text-[11px] text-slate-400 mt-3 border-t border-slate-100 pt-3">
-          Oliy ta'lim vazirligi qoshidagi Kasbiy ta'lim agentligi ko'magida
+          {BRAND.agencyNote}
         </p>
       </div>
     </main>

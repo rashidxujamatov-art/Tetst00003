@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { pickRandom } from "@/lib/random";
+import { normalizeUzPhone, isValidUzPhone, isValidEmail, formatUzPhone } from "@/lib/validate";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -37,20 +38,21 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   const body = await req.json().catch(() => ({}));
   const fullName = String(body.fullName || "").trim();
   const email = String(body.email || "").trim().toLowerCase();
-  const phone = String(body.phone || "").trim();
+  const phoneRaw = String(body.phone || "").trim();
   const gender = String(body.gender || "").trim();
   const birthDate = String(body.birthDate || "").trim();
   const organization = String(body.organization || "").trim() || null;
 
-  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const phoneDigits = phone.replace(/[^\d]/g, "");
-  const phoneOk = phoneDigits.length >= 7 && phoneDigits.length <= 15;
+  const phoneNorm = normalizeUzPhone(phoneRaw);
 
   if (!fullName) return NextResponse.json({ error: "F.I.Sh kiriting" }, { status: 400 });
-  if (!emailOk) return NextResponse.json({ error: "To'g'ri elektron pochta kiriting" }, { status: 400 });
-  if (!phoneOk) return NextResponse.json({ error: "Telefon raqami formati noto'g'ri" }, { status: 400 });
+  if (!isValidEmail(email)) return NextResponse.json({ error: "To'g'ri elektron pochta kiriting" }, { status: 400 });
+  if (!phoneNorm || !isValidUzPhone(phoneRaw))
+    return NextResponse.json({ error: "Telefon raqami O'zbekiston formatида emas (+998 va 9 ta raqam)" }, { status: 400 });
   if (!gender) return NextResponse.json({ error: "Jinsni tanlang" }, { status: 400 });
   if (!birthDate) return NextResponse.json({ error: "Tug'ilgan sanani kiriting" }, { status: 400 });
+
+  const phone = formatUzPhone(phoneRaw);
 
   const exam = await prisma.exam.findUnique({
     where: { id: params.id },
